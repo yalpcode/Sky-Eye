@@ -13,6 +13,7 @@ app.include_router(router, dependencies=[Depends(token_access)])
 
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts='*')
 
+
 if application_settings.APP_DEBUG:
     from pyngrok import ngrok
 
