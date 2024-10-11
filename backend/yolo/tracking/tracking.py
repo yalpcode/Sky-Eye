@@ -4,11 +4,11 @@ import numpy as np
 
 from ultralytics import YOLO
 from ultralytics.engine.results import Boxes
+from ultralytics.trackers.bot_sort import BOTSORT
 from collections import defaultdict
 from datetime import datetime
 
-from tracker import BOTSORTArgs, BOTSORTv2
-
+from tracker import BOTSORTArgs
 
 class TrackedObject(object):
     MAX_POINTS = 90
@@ -101,7 +101,7 @@ class Tracker(object):
     def __init__(self, weights_path: str) -> None:
         self.model = YOLO(weights_path)
         self.tracked_objects = defaultdict(lambda: TrackedObject())
-        self.custom_tracker = BOTSORTv2(BOTSORTArgs())
+        self.custom_tracker = BOTSORT(BOTSORTArgs())
 
     def load_model(self, weights_path: str) -> None:
         self.model = YOLO(weights_path)
