@@ -1,14 +1,13 @@
 import base64
-from collections import defaultdict
-from datetime import datetime
-
 import cv2
 import numpy as np
+
+from collections import defaultdict
+from datetime import datetime
 from ultralytics import YOLO
 from ultralytics.engine.results import Boxes
-from ultralytics.trackers.bot_sort import BOTSORT
-from yolo.tracking.tracker import BOTSORTArgs
 
+from tracker import BOTSORTArgs, BOTSORTv2
 
 class TrackedObject:
     MAX_POINTS = 90
@@ -30,7 +29,7 @@ class TrackedObject:
     def predicted_position(self):
         if len(self._tracked_points) < 3:
             return np.array([]).astype(np.int32)
-        points_array = np.array(self._tracked_points)
+        points_array = np.array(self._tracked_points[-16:])
         x_differences = np.diff(points_array[:, 0])
         y_differences = np.diff(points_array[:, 1])
         avg_x_diff = np.mean(x_differences) * 10
@@ -96,7 +95,7 @@ class Tracker(object):
     def __init__(self, weights_path: str) -> None:
         self.model = YOLO(weights_path)
         self.tracked_objects = defaultdict(lambda: TrackedObject())
-        self.custom_tracker = BOTSORT(BOTSORTArgs())
+        self.custom_tracker = BOTSORTv2(BOTSORTArgs())
 
     def load_model(self, weights_path: str) -> None:
         self.model = YOLO(weights_path)
@@ -107,7 +106,11 @@ class Tracker(object):
         if results[0].boxes.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return {"processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()), "bojects": []}
+            return {
+                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
+                "bojects": []
+            }
+        # print(results[0].boxes)
         objects = self.custom_tracker.update(results[0].boxes, frame)
         # print(results[0].boxes)
         if objects.shape[0] == 0:
@@ -196,11 +199,11 @@ class Tracker(object):
 
 
 if __name__ == "__main__":
-    tracker = Tracker("yolo11n.pt")
+    tracker = Tracker("latest_yolo.pt")
     tracker.SHOW_PREDS = True
     tracker.SAVE = False
     try:
-        tracker.track_video("test_video.mp4")
+        tracker.track_video("14052021_(t40).mp4")
     except KeyboardInterrupt:
         breakpoint()
     for num, i in enumerate(tracker.get_objects().values()):
