@@ -42,6 +42,7 @@ jobs:
         file: backend/Dockerfile
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-backend:latest
         push: true
+
     - name: "Run deploy on server"
       uses: appleboy/ssh-action@v0.1.4
       with:
