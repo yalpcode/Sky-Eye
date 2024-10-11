@@ -35,7 +35,6 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: "Build and push | backend"
-      if: steps.changes.outputs.backend == 'true'
       uses: docker/build-push-action@v4
       with:
         context: backend/
