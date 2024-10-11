@@ -1,16 +1,25 @@
-import random
-import time
-from concurrent.futures import ThreadPoolExecutor
+import os.path
 from datetime import datetime
 
-import asyncio
-from fastapi import BackgroundTasks, APIRouter, Body, Depends, HTTPException, Query, status
-from fastapi.encoders import jsonable_encoder
-# from src.schemas import OptimizationInSchema, OptimizationOutSchema
+import aiofiles
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Body,
+    Depends,
+    File,
+    HTTPException,
+    Path,
+    Query,
+    UploadFile,
+    status,
+)
+from src.utils.process_video import process_video
+from yolo.tracking.tracking import Tracker
 
-router = APIRouter(prefix="/api/v0", tags=['Optuna'])
+router = APIRouter(prefix='/api/v0', tags=['Video Processing'])
 
-executor = ThreadPoolExecutor()
+tracker = Tracker('../../yolo/inputs/yolo11n.pt')
 
 
 def get_now_timestamp():
@@ -18,95 +27,41 @@ def get_now_timestamp():
 
 
 @router.get(
-    "/optimizations",
-    response_description="Get all optimizations",
-    status_code=status.HTTP_200_OK,
+    "/processed/video/{video_id}",
+    response_description="Upload new video",
+    status_code=status.HTTP_201_CREATED,
 )
-async def api_get_raw_reports(
-    limit: int = Query(50, ge=1, le=500),
-    offset: int = Query(0, ge=0),
-) -> list:
-    """
-    Getting a list of optimizations
-    Args:
-        limit: What number of optimizations should be returned
-        offset: What number of optimizations should be skipped before
-        db: Mongo DB
+async def download_processed_video(
+    video_path: str = Path(),
+) -> dict:
+    try:
+        filename = video.filename
+        async with aiofiles.open(filename, 'wb') as f:
+            while contents := await video.read(1024 * 1024):
+                await f.write(contents)
+    except Exception:
+        return {'message': 'There was an error uploading the file'}
 
-    Returns:
-        list of optimizations in the collection
-    """
-    return await db.optimization.find().skip(offset).to_list(length=limit)
-
-
-def worker(config):
-    tuner = Tuner(jsonable_encoder(config), optimization=config.name)
-    tuner.fit()
-
+    return {'message': f"Successfuly uploaded {filename}"}
 
 
 @router.post(
-    "/optimizations/run",
-    response_description="Run new optimization",
+    "/raw/video/upload",
+    response_description="Upload new video",
     status_code=status.HTTP_201_CREATED,
 )
-async def api_create_optimization(
+async def upload_new_video(
     background_tasks: BackgroundTasks,
-    # config: OptimizationInSchema = Body(...),
+    video: UploadFile = File(...),
 ) -> dict:
-    """
-    Run new optimization
-    Args:
-        background_tasks: Background tasks
-        config: Experiment parameters
-        db: Mongo DB
+    try:
+        filename: str = video.filename
+        video_path: str = os.path.join('database/raw', filename)
+        async with aiofiles.open(filename, 'wb') as f:
+            while contents := await video.read(1024 * 1024):
+                await f.write(contents)
+    except Exception:
+        return {'message': 'There was an error uploading the file'}
 
-    Returns:
-        The created optimization
-    """
-    if await db.optimization.find_one({'name': config.name}) is not None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={
-                'status': 'error',
-                'details': f"Optimization `{config.name}` is already exists!",
-            },
-        )
-    background_tasks.add_task(executor.submit, worker, config)
-
-    result = await db.optimization.insert_one(
-        {
-            'name': config.name,
-            'state': {
-                'trial': 0
-            },
-            'tuner': dict(config.tuner),
-            'metadata': dict(config.metadata),
-            'created_at': get_now_timestamp(),
-        }
-    )
-    optimization = await db.optimization.find_one(result.inserted_id)
-    return optimization
-
-
-# @router.get(
-#     "/optimization/stats",
-#     response_description="Get stats for all reports",
-#     status_code=status.HTTP_201_CREATED,
-# )
-# async def api_get_report_stats(
-#     product: str = Query(...),
-#     db: AsyncIOMotorCollection = Depends(get_database),
-# ) -> Stats:
-#     """
-#     Get stats of uploaded reports
-#     Args:
-#         product: Search the reports with this product
-#         db: Mongo DB
-#
-#     Returns:
-#         Stats (count of uploaded reports)
-#     """
-#     raw_reports_count = await db.raw_report.count_documents({"metadata.product": product})
-#     stats = {'raw_reports_count': raw_reports_count}
-#     return stats
+    background_tasks.add_task(process_video, process_video, video_path)
+    return {'message': f"Successfuly uploaded {filename}"}

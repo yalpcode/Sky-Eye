@@ -5,10 +5,7 @@ from src.core.settings import application_settings
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 # Application Base
-app = FastAPI(
-    title=application_settings.APP_TITLE,
-    description="...",
-)
+app = FastAPI(title=application_settings.APP_TITLE)
 app.include_router(router, dependencies=[Depends(token_access)])
 
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts='*')

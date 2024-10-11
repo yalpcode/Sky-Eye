@@ -1,16 +1,16 @@
 import base64
-import cv2
-import numpy as np
-
-from ultralytics import YOLO
-from ultralytics.engine.results import Boxes
-from ultralytics.trackers.bot_sort import BOTSORT
 from collections import defaultdict
 from datetime import datetime
 
-from tracker import BOTSORTArgs
+import cv2
+import numpy as np
+from ultralytics import YOLO
+from ultralytics.engine.results import Boxes
+from ultralytics.trackers.bot_sort import BOTSORT
+from yolo.tracking.tracker import BOTSORTArgs
 
-class TrackedObject(object):
+
+class TrackedObject:
     MAX_POINTS = 90
 
     def __init__(self):
@@ -68,10 +68,9 @@ class TrackedObject(object):
             "bboxn": self.bboxes_norm,
             "points": self.points.tolist(),
             "cropped_frame": base64.encodebytes(
-                b"" if not send_frame
-                else cv2.imencode('.jpg', self.cropped_frame)[1].tobytes()
+                b"" if not send_frame else cv2.imencode('.jpg', self.cropped_frame)[1].tobytes()
             ).decode(),
-            "predicted_position": self.predicted_position.tolist()
+            "predicted_position": self.predicted_position.tolist(),
         }
 
     def __str__(self):
@@ -103,28 +102,18 @@ class Tracker(object):
         self.model = YOLO(weights_path)
 
     def track_next_frame(self, frame: np.array) -> dict:
-        results = self.model.predict(
-            frame,
-            verbose=self.VERBOSE,
-            classes=[0, 2, 3, 6, 7]
-        )
+        results = self.model.predict(frame, verbose=self.VERBOSE, classes=[0, 2, 3, 6, 7])
         # print(results[0].boxes.shape)
         if results[0].boxes.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return {
-                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
-                "bojects": []
-            }
+            return {"processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()), "bojects": []}
         objects = self.custom_tracker.update(results[0].boxes, frame)
         # print(results[0].boxes)
         if objects.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return {
-                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
-                "bojects": []
-            }
+            return {"processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()), "bojects": []}
 
         boxes = Boxes(objects[:, :-1], frame.shape)
         names = results[0].names
@@ -143,12 +132,7 @@ class Tracker(object):
             track.bboxes_norm = tuple(map(float, box.xywhn[0]))
 
             cv2.polylines(
-                annotated_frame,
-                [track.points],
-                isClosed=False,
-                color=(0, 255, 0),
-                thickness=2,
-                lineType=cv2.LINE_AA
+                annotated_frame, [track.points], isClosed=False, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA
             )
             predicted_position = track.predicted_position
             if predicted_position.shape[0] != 0:
@@ -158,13 +142,13 @@ class Tracker(object):
                     isClosed=False,
                     color=(255, 0, 0),
                     thickness=2,
-                    lineType=cv2.LINE_AA
+                    lineType=cv2.LINE_AA,
                 )
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", annotated_frame)
         return {
             "processed_frame": "",
-            "objects": [self.tracked_objects[track_id].json(send_frame=True) for track_id in track_ids]
+            "objects": [self.tracked_objects[track_id].json(send_frame=True) for track_id in track_ids],
         }
 
         # return [self.tracked_objects[track_id] for track_id in track_ids]
@@ -206,7 +190,7 @@ class Tracker(object):
         x = int(x_center - w / 2)
         y = int(y_center - h / 2)
 
-        cropped_image = image[y:y + h, x:x + w]
+        cropped_image = image[y : y + h, x : x + w]
 
         return cropped_image
 
