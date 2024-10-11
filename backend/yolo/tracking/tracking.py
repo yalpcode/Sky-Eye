@@ -67,12 +67,11 @@ class TrackedObject(object):
             "class": self.type,
             "bboxn": self.bboxes_norm,
             "points": self.points.tolist(),
-            "first_detection": self.first_detection,
-            "last_detection": self.last_detection,
             "cropped_frame": base64.encodebytes(
                 b"" if not send_frame
                 else cv2.imencode('.jpg', self.cropped_frame)[1].tobytes()
-            ).decode()
+            ).decode(),
+            "predicted_position": self.predicted_position.tolist()
         }
 
     def __str__(self):
@@ -88,9 +87,6 @@ class TrackedObject(object):
 
 
 class Tracker(object):
-    # MODEL THRESHOLDS
-    CONF = 0.3
-    IOU = 0.5
     FRAMES_COUNT = 10
 
     # VISUALIZE
@@ -106,7 +102,7 @@ class Tracker(object):
     def load_model(self, weights_path: str) -> None:
         self.model = YOLO(weights_path)
 
-    def track_next_frame(self, frame: np.array) -> list[TrackedObject]:
+    def track_next_frame(self, frame: np.array) -> dict:
         results = self.model.predict(
             frame,
             verbose=self.VERBOSE,
@@ -116,13 +112,19 @@ class Tracker(object):
         if results[0].boxes.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return []
+            return {
+                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
+                "bojects": []
+            }
         objects = self.custom_tracker.update(results[0].boxes, frame)
         # print(results[0].boxes)
         if objects.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return []
+            return {
+                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
+                "bojects": []
+            }
 
         boxes = Boxes(objects[:, :-1], frame.shape)
         names = results[0].names
@@ -140,27 +142,32 @@ class Tracker(object):
             track.points = (float(x), float(y))
             track.bboxes_norm = tuple(map(float, box.xywhn[0]))
 
-            if self.SHOW_PREDS:
+            cv2.polylines(
+                annotated_frame,
+                [track.points],
+                isClosed=False,
+                color=(0, 255, 0),
+                thickness=2,
+                lineType=cv2.LINE_AA
+            )
+            predicted_position = track.predicted_position
+            if predicted_position.shape[0] != 0:
                 cv2.polylines(
                     annotated_frame,
-                    [track.points],
+                    [track.predicted_position],
                     isClosed=False,
-                    color=(0, 255, 0),
+                    color=(255, 0, 0),
                     thickness=2,
                     lineType=cv2.LINE_AA
                 )
-                predicted_position = track.predicted_position
-                if predicted_position.shape[0] != 0:
-                    cv2.polylines(
-                        annotated_frame,
-                        [track.predicted_position],
-                        isClosed=False,
-                        color=(255, 0, 0),
-                        thickness=2,
-                        lineType=cv2.LINE_AA
-                    )
+            if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", annotated_frame)
-        return [self.tracked_objects[track_id] for track_id in track_ids]
+        return {
+            "processed_frame": "",
+            "objects": [self.tracked_objects[track_id].json(send_frame=True) for track_id in track_ids]
+        }
+
+        # return [self.tracked_objects[track_id] for track_id in track_ids]
 
     def track_video(self, video: str | cv2.VideoCapture) -> None:
         if isinstance(video, str):
@@ -170,6 +177,7 @@ class Tracker(object):
 
             if success:
                 self.track_next_frame(frame)
+                # breakpoint()
                 if self.SHOW_PREDS:
                     if cv2.waitKey(1) & 0xFF in [ord("q"), 27]:
                         break
