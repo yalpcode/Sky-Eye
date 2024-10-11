@@ -204,7 +204,7 @@ class Tracker(object):
 
 
 if __name__ == "__main__":
-    tracker = Tracker("yolov8n.pt")
+    tracker = Tracker("yolo11n.pt")
     tracker.SHOW_PREDS = True
     tracker.SAVE = False
     try:

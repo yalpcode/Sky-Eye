@@ -21,6 +21,7 @@ class BOTSORTArgs(object):
     # ReID model related thresh (not supported yet)
     proximity_thresh = 0.5
     appearance_thresh = 0.25
+    fuse_score = True
     with_reid = True
 
 
