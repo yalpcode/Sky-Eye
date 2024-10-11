@@ -3,7 +3,7 @@ version: '3'
 services:
 
   drone-ai-backend:
-    image: andrewlimit/optimizer:latest
+    image: andrewlimit/ai-backend:latest
     ports:
       - '8000:8000'
     depends_on:
