@@ -8,6 +8,13 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.115.0"
+uvicorn = "^0.31.1"
+pydantic = "^2.9.2"
+pydantic-settings = "^2.5.2"
+aiofiles = "^24.1.0"
+python-multipart = "^0.0.12"
+opencv-python = "^4.10.0.84"
+ultralytics = "^8.3.10"
 
 
 [build-system]

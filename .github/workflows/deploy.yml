@@ -2,7 +2,7 @@ name: Deploy services
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ 'main' ]
 
 permissions:
   contents: read
@@ -34,14 +34,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: "Build and push | optimizer"
-      if: steps.changes.outputs.optimizer == 'true'
+    - name: "Build and push | backend"
       uses: docker/build-push-action@v4
       with:
-        context: optimizer/
-        file: optimizer/Dockerfile
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
+        context: backend/
+        file: backend/Dockerfile
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-backend:latest
         push: true
+
     - name: "Run deploy on server"
       uses: appleboy/ssh-action@v0.1.4
       with:
@@ -49,6 +49,6 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd neural-optimizer
-          sudo docker compose -f docker-compose.dev.yaml -p optimizer-dev pull
-          sudo docker compose -f docker-compose.dev.yaml -p optimizer-dev up -d
+          cd dune-ai
+          sudo docker compose -f docker-compose.yaml -p dune-ai pull
+          sudo docker compose -f docker-compose.yaml -p dune-ai up -d

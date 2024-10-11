@@ -3,6 +3,6 @@ version: '3'
 services:
 
   drone-ai-backend:
-    image: andrewlimit/ai-backend:latest
+    build: backend/
     ports:
       - '8000:8000'
