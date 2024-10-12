@@ -5,11 +5,11 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libffi-dev \
     python3-dev \
-    libgl1-mesa-glx \
-    libglu1-mesa \
-    libglib2.0-0
     && apt-get clean
-# RUN pip install --no-cache-dir --upgrade pip
+
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libglu1-mesa libglib2.0-0
+RUN pip install --no-cache-dir --upgrade pip
+
 
 WORKDIR /drone-ai-backend
 
