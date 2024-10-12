@@ -38,7 +38,8 @@
 }
 
 .input-form {
-    height: 90%;
+    margin-top: 2%;
+    height: 200%;
     width: 50%;
     display: flex;
     justify-content: center;
@@ -59,9 +60,10 @@
 
 .upload-file-text {
     font-family: 'HSESans-Bold';
-    font-size: 27px;
+    font-size: 30px;
     color: #8cb676;
     margin: 0;
+    margin-bottom: 3%;
 }
 
 #input-file-upload {
@@ -95,6 +97,11 @@
     font-size: 30px;
     background-color: transparent;
     color: #759862;
+    margin-bottom: 2%;
+}
+
+.upload-image {
+    margin-top: 2%;
 }
 
 .upload-button:hover {
