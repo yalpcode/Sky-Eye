@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./index.scss";
+import { useInterval } from 'react-use'
+import droneImage from './drone.png'
 
 const fileTypes = ["MOV", "MP4"];
 
@@ -42,11 +43,74 @@ function DragDrop({ setVideoFile }) {
         }
     };
 
+    const [x1, setX1] = useState(0);
+    const [y1, setY1] = useState(0);
+
+    useInterval(() => {
+        setX1(Math.random() * 2000);
+        setY1(Math.random() * 1000);
+    }, 200);
+
+    const [x2, setX2] = useState(0);
+    const [y2, setY2] = useState(0);
+
+    useInterval(() => {
+        setX2(Math.random() * 2000);
+        setY2(Math.random() * 1000);
+    }, 200);
+
+    const [x3, setX3] = useState(0);
+    const [y3, setY3] = useState(0);
+
+    useInterval(() => {
+        setX3(Math.random() * 2000);
+        setY3(Math.random() * 1000);
+    }, 200);
+
     return (
         <div>
             <div className="name">
-                <span className="drone">DRONE </span>
-                <span className="ai">AI</span>
+                <span className="drone">SKY </span>
+                <span className="ai">EYE</span>
+            </div>
+            <div className="drone1" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x1}px, ${y1}px)`
+                    }}
+                />
+            </div>
+            <div className="drone2" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x2}px, ${y2}px)`
+                    }}
+                />
+            </div>
+            <div className="drone3" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x3}px, ${y3}px)`
+                    }}
+                />
             </div>
             <div className="form">
                 <div className="input-form">
@@ -71,4 +135,3 @@ function DragDrop({ setVideoFile }) {
 };
 
 export default DragDrop;
-

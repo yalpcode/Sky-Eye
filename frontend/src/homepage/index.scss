@@ -153,6 +153,14 @@
     font-size: 16px;
 }
 
-.drone {
-    font-weight: bold;
+.drone1 {
+    width: 400px;
+    height: 300px;
+    /* Задайте размер области */
+    position: absolute;
+    /* Чтобы картинка позиционировалась относительно контейнера */
+}
+
+.flying-drone1 {
+    animation: move-around 3s infinite;
 }
