@@ -14,7 +14,15 @@
     font-size: 30px;
 }
 
-.name__text {
+.drone {
+    font-weight: 1000;
+    margin: 0;
+    text-shadow: 7px 8px 20px #5e5e5e,
+        -7px 8px 20px #5e5e5e;
+    ;
+}
+
+.ai {
     margin: 0;
     text-shadow: 7px 8px 20px #5e5e5e,
         -7px 8px 20px #5e5e5e;
@@ -35,10 +43,11 @@
 }
 
 .input-text {
-    padding-top: 8%;
+    width: 30%;
+    padding-top: 3%;
     font-family: 'HSESans-Bold';
     font-size: 23px;
-    color: #636363;
+    color: #dddddd;
 }
 
 .input-form {
@@ -52,14 +61,14 @@
     flex-direction: column;
 
     border-width: 3px;
-    border-radius: 8rem;
+    border-radius: 5rem;
     padding: 4% 50px;
 }
 
 .upload-file-text {
     font-family: 'HSESans-Bold';
     font-size: 28px;
-    color: #636363;
+    color: #dddddd;
     margin-top: 0px;
     margin: 0;
     margin-bottom: 3%;
@@ -75,7 +84,7 @@
     align-items: center;
     justify-content: center;
     border-width: 2px;
-    border-radius: 6rem;
+    border-radius: 4rem;
     border-style: dashed;
     border-color: #cbd5e1;
     // background-color: #f3f3f3;
@@ -126,4 +135,32 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
+}
+
+.text {
+    align-items: center;
+    width: 300%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.summarize {
+    width: 60%;
+    font-family: "HSESans-Bold";
+    color: #5e5e5e;
+    font-size: 16px;
+}
+
+.drone1 {
+    width: 400px;
+    height: 300px;
+    /* Задайте размер области */
+    position: absolute;
+    /* Чтобы картинка позиционировалась относительно контейнера */
+}
+
+.flying-drone1 {
+    animation: move-around 3s infinite;
 }

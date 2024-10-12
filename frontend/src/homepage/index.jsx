@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./index.scss";
+import { useInterval } from 'react-use'
+import droneImage from './drone.png'
 
 const fileTypes = ["MOV", "MP4"];
 
@@ -42,14 +43,74 @@ function DragDrop({ setVideoFile }) {
         }
     };
 
-    const onButtonClick = () => {
-        inputRef.current.click();
-    };
+    const [x1, setX1] = useState(0);
+    const [y1, setY1] = useState(0);
+
+    useInterval(() => {
+        setX1(Math.random() * 2000);
+        setY1(Math.random() * 1000);
+    }, 200);
+
+    const [x2, setX2] = useState(0);
+    const [y2, setY2] = useState(0);
+
+    useInterval(() => {
+        setX2(Math.random() * 2000);
+        setY2(Math.random() * 1000);
+    }, 200);
+
+    const [x3, setX3] = useState(0);
+    const [y3, setY3] = useState(0);
+
+    useInterval(() => {
+        setX3(Math.random() * 2000);
+        setY3(Math.random() * 1000);
+    }, 200);
 
     return (
         <div>
             <div className="name">
-                <h1 className="name__text">DRONE <b>AI</b></h1>
+                <span className="drone">SKY </span>
+                <span className="ai">EYE</span>
+            </div>
+            <div className="drone1" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x1}px, ${y1}px)`
+                    }}
+                />
+            </div>
+            <div className="drone2" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x2}px, ${y2}px)`
+                    }}
+                />
+            </div>
+            <div className="drone3" style={{
+                position: 'absolute'
+            }}>
+                <img
+                    className="flying1"
+                    src={droneImage}
+                    style={{
+                        position: 'absolute',
+                        transition: 'transform 2s ease',
+                        transform: `translate(${x3}px, ${y3}px)`
+                    }}
+                />
             </div>
             <div className="form">
                 <div className="input-form">
@@ -61,10 +122,10 @@ function DragDrop({ setVideoFile }) {
                                 <path d="M29.6429 74.3748H53.3571C56.6179 74.3748 59.2857 71.7169 59.2857 68.4685V38.937H68.7121C73.9886 38.937 76.6564 32.5582 72.9214 28.8372L45.7093 1.72726C45.1608 1.17973 44.5093 0.745333 43.7921 0.448946C43.0749 0.15256 42.3061 0 41.5296 0C40.7532 0 39.9844 0.15256 39.2672 0.448946C38.55 0.745333 37.8985 1.17973 37.35 1.72726L10.1379 28.8372C6.40286 32.5582 9.01143 38.937 14.2879 38.937H23.7143V68.4685C23.7143 71.7169 26.3821 74.3748 29.6429 74.3748ZM5.92857 86.1874H77.0714C80.3321 86.1874 83 88.8452 83 92.0937C83 95.3422 80.3321 98 77.0714 98H5.92857C2.66786 98 0 95.3422 0 92.0937C0 88.8452 2.66786 86.1874 5.92857 86.1874Z" fill="#ECECEC" />
                             </svg>
                         </label>
-                        <div>
-                                <p className="input-text">Drag and drop your file here or </p>
-                                <button className="upload-button" onClick={onButtonClick}>browse</button>
-                            </div>
+                        <div className="text">
+                            <p className="input-text">Drag and drop your file here or browse</p>
+                            <p className="summarize">Once uploaded, the video will be processed by a neural network. You will see recognized flying objects.</p>
+                        </div>
                         {dragActive && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
                     </form>
                 </div>
@@ -74,4 +135,3 @@ function DragDrop({ setVideoFile }) {
 };
 
 export default DragDrop;
-
