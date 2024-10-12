@@ -1,3 +1,15 @@
 .uploader {
-  margin-left: 10%;
+    margin-left: 10%;
+}
+
+@font-face {
+    font-family: HSESans-Bold;
+    src: url("fonts/HSESans-Bold.woff2");
+}
+
+body {
+    background-color: #779B64;
+    vertical-align: middle;
+    margin: 0;
+    width: 100%;
 }

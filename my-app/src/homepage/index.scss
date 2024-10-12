@@ -1,17 +1,7 @@
-@font-face {
-    font-family: HSESans-Bold;
-    src: url("../fonts/HSESans-Bold.woff2");
-}
-
-body {
-    background-color: #779B64;
-    vertical-align: middle;
-}
-
 .form {
-    padding-top: 1%;
-    width: 1920px;
-    height: 800px;
+    padding: 1%;
+    max-width: 1920px;
+    max-height: 800px;
     display: flex;
     justify-content: center;
 }
@@ -19,9 +9,13 @@ body {
 .name {
     font-family: 'HSESans-Bold';
     color: #ffffff;
-    margin-top: 1.5%;
-    margin-left: 3%;
+    padding-top: 1.5%;
+    padding-left: 3%;
     font-size: 30px;
+}
+
+.name__text {
+    margin: 0;
 }
 
 #form-file-upload {
@@ -37,7 +31,7 @@ body {
 }
 
 .input-text {
-    padding-top: 10%;
+    padding-top: 8%;
     font-family: 'HSESans-Bold';
     font-size: 26px;
     color: #8cb676;
@@ -60,13 +54,14 @@ body {
         /* Тень справа */
         -13px 8px 20px #627955;
     /* Тень слева */
+    padding: 4% 50px;
 }
 
 .upload-file-text {
     font-family: 'HSESans-Bold';
     font-size: 27px;
     color: #8cb676;
-    margin-bottom: 0;
+    margin: 0;
 }
 
 #input-file-upload {
@@ -85,6 +80,7 @@ body {
     border-style: dashed;
     border-color: #cbd5e1;
     background-color: #e9f3e5;
+    padding: 2% 10px;
 }
 
 #label-file-upload.drag-active {

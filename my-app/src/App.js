@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
 
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes, useParams, useSearchParams } from 'react-router-dom';
 import DragDrop from "./homepage";
 import VideoProcessor from "./VideoProcessor";
+import "./App.css";
 
 function App() {
-    // ... (внутри функции App нет логики, поэтому здесь нет комментариев)
+    const [videoFile, setVideoFile] = useState(null);
 
     return (
         <div className="App">
-            <BrowserRouter> {/* BrowserRouter только один, вокруг Routes */}
+            <BrowserRouter> { }
                 <Routes>
-                    <Route path='/' element={<DragDrop />} />
-                    <Route path='/video-processor' element={<VideoProcessor />} />
+                    <Route path='/' element={<DragDrop setVideoFile={setVideoFile} />} />
+                    <Route path='/video-processor' element={<VideoProcessor videoFile={videoFile} />} />
                 </Routes>
             </BrowserRouter>
         </div >

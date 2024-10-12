@@ -5,21 +5,17 @@ import "./index.scss";
 
 const fileTypes = ["MOV", "MP4"];
 
-function DragDrop() {
-    // drag state
+function DragDrop({ setVideoFile }) {
     const [dragActive, setDragActive] = React.useState(false);
-    // ref
     const inputRef = React.useRef(null);
 
     const to = useNavigate();
 
-    async function handleFile(file) {
-        to('/video-processor', {
-            state: { file: file },
-        });
+    const handleFile = (file) => {
+        setVideoFile(file);
+        to('/video-processor');
     }
 
-    // handle drag events
     const handleDrag = function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -30,7 +26,6 @@ function DragDrop() {
         }
     };
 
-    // triggers when file is dropped
     const handleDrop = function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -40,7 +35,6 @@ function DragDrop() {
         }
     };
 
-    // triggers when file is selected with click
     const handleChange = function (e) {
         e.preventDefault();
         if (e.target.files && e.target.files[0]) {
@@ -48,15 +42,14 @@ function DragDrop() {
         }
     };
 
-    // triggers the input when the button is clicked
     const onButtonClick = () => {
         inputRef.current.click();
     };
 
     return (
-        <body>
+        <div>
             <div className="name">
-                <h1>DroneAI</h1>
+                <h1 className="name__text">DroneAI</h1>
             </div>
             <div className="form">
                 <div className="input-form">
@@ -76,8 +69,7 @@ function DragDrop() {
                     </form>
                 </div>
             </div>
-        </body>
-
+        </div>
     );
 };
 
