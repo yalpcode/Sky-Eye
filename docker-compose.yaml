@@ -1,13 +1,19 @@
 version: '3'
 
 services:
-
   drone-ai-backend:
     image: andrewlimit/ai-backend:latest
     ports:
       - '8000:8000'
+    networks:
+      - common-network
 
   drone-ai-frontend:
     image: andrewlimit/ai-frontend:latest
     ports:
       - '3000:3000'
+    networks:
+      - common-network
+
+networks:
+  common-network:
