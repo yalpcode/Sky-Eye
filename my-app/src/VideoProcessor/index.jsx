@@ -34,7 +34,6 @@ class VideoProcessor extends React.Component {
                         context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
                         const frame = context.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                        console.log(frame.data);
 
                         context.putImageData(frame, 0, 0);
 
