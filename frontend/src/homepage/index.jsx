@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./index.scss";
 import { useInterval } from 'react-use'
@@ -43,30 +43,46 @@ function DragDrop({ setVideoFile }) {
         }
     };
 
+    const [screenWidth, setScreenWidth] = useState(0);
+    const [screenHeight, setScreenHeight] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+            setScreenHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Вызываем при начальной загрузке
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    console.log(screenHeight, screenWidth)
+
     const [x1, setX1] = useState(0);
     const [y1, setY1] = useState(0);
 
     useInterval(() => {
-        
-        setX1(Math.random() * 1000);
-        setY1(Math.random() * 1000);
-    }, 1000);
+        setX1(Math.max(0, Math.min(screenWidth - x1, Math.random() * 1000)));
+        setY1(Math.max(0, Math.min(screenHeight - y1 - 300, Math.random() * 1000)));
+    }, 1800);
 
     const [x2, setX2] = useState(0);
     const [y2, setY2] = useState(0);
 
     useInterval(() => {
-        setX2(Math.random() * 1000);
-        setY2(Math.random() * 1000);
-    }, 1000);
+        setX2(Math.max(0, Math.min(screenWidth - x2, Math.random() * 1000)));
+        setY2(Math.max(0, Math.min(screenHeight - y2 - 300, Math.random() * 1000)));
+    }, 1800);
 
     const [x3, setX3] = useState(0);
     const [y3, setY3] = useState(0);
 
     useInterval(() => {
-        setX3(Math.random() * 1000);
-        setY3(Math.random() * 1000);
-    }, 1000);
+        setX3(Math.max(0, Math.min(screenWidth - x3, Math.random() * 1000)));
+        setY3(Math.max(0, Math.min(screenHeight - y3 - 300, Math.random() * 1000)));
+    }, 1800);
 
     return (
         <div>
