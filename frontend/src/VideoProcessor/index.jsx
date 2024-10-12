@@ -26,6 +26,8 @@ class VideoProcessor extends React.Component {
         this.state = {
             currentSvgIndex: 0,
         };
+        this.fet = 0;
+        this.res = 0;
         this.svgs = [
             // Первый SVG 
             <svg width="50" height="50" viewBox="0 0 218 230" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,6 +46,7 @@ class VideoProcessor extends React.Component {
             const formData = new FormData();
             formData.append('frame', blob);
 
+            let fetN = ++this.fet;
             axios.post(`http://${this.host}:${this.port}/api/v0/video/frame/detect`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -51,7 +54,16 @@ class VideoProcessor extends React.Component {
                     'Access-Control-Allow-Origin': '*',
                 }
             })
-                .then(response => {
+                .then(async response => {
+                    let resN = ++this.res;
+
+                    if (response.status != 200) {
+                        return;
+                    }
+                    while (resN !== fetN) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+
                     const imageURL = `data:image/jpeg;base64,${response.data['image']}`;
 
                     const img = new Image();
