@@ -47,25 +47,26 @@ function DragDrop({ setVideoFile }) {
     const [y1, setY1] = useState(0);
 
     useInterval(() => {
-        setX1(Math.random() * 2000);
+        
+        setX1(Math.random() * 1000);
         setY1(Math.random() * 1000);
-    }, 200);
+    }, 1000);
 
     const [x2, setX2] = useState(0);
     const [y2, setY2] = useState(0);
 
     useInterval(() => {
-        setX2(Math.random() * 2000);
+        setX2(Math.random() * 1000);
         setY2(Math.random() * 1000);
-    }, 200);
+    }, 1000);
 
     const [x3, setX3] = useState(0);
     const [y3, setY3] = useState(0);
 
     useInterval(() => {
-        setX3(Math.random() * 2000);
+        setX3(Math.random() * 1000);
         setY3(Math.random() * 1000);
-    }, 200);
+    }, 1000);
 
     return (
         <div>
