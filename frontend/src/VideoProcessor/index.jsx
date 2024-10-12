@@ -7,12 +7,12 @@ class VideoProcessor extends React.Component {
     constructor(props) {
         super(props);
 
-        if (process.env.HOST != undefined && process.env.PORT) {
-            this.host = process.env.HOST;
-            this.port = process.env.PORT;
+        if (process.env.HOST_BACKEND != undefined && process.env.PORT_BACKEND) {
+            this.host_backend = process.env.HOST_BACKEND;
+            this.port_backend = process.env.PORT_BACKEND;
         } else {
-            this.host = "127.0.0.1";
-            this.port = "8000"
+            this.host_backend = "127.0.0.1";
+            this.port_backend = "8000"
         }
 
         this.playerRef = React.createRef();
@@ -47,7 +47,7 @@ class VideoProcessor extends React.Component {
             formData.append('frame', blob);
 
             let fetN = ++this.fet;
-            axios.post(`http://${this.host}:${this.port}/api/v0/video/frame/detect`, formData, {
+            axios.post(`http://${this.host_backend}:${this.port_backend}/api/v0/video/frame/detect`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer *',
