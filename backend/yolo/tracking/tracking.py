@@ -1,13 +1,13 @@
 import base64
-import cv2
-import numpy as np
-
 from collections import defaultdict
 from datetime import datetime
+
+import cv2
+import numpy as np
 from ultralytics import YOLO
 from ultralytics.engine.results import Boxes
-
 from yolo.tracking.tracker import BOTSORTArgs, BOTSORTv2
+
 
 class TrackedObject:
     MAX_POINTS = 90
@@ -106,10 +106,7 @@ class Tracker(object):
         if results[0].boxes.shape[0] == 0:
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", frame)
-            return {
-                "processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()),
-                "bojects": []
-            }
+            return {"processed_frame": base64.encodebytes(cv2.imencode('.jpg', frame)[1].tobytes()), "bojects": []}
         # print(results[0].boxes)
         objects = self.custom_tracker.update(results[0].boxes, frame)
         # print(results[0].boxes)
@@ -143,14 +140,14 @@ class Tracker(object):
                     annotated_frame,
                     [track.predicted_position],
                     isClosed=False,
-                    color=(255, 0, 0),
+                    color=(0, 0, 255),
                     thickness=2,
                     lineType=cv2.LINE_AA,
                 )
             if self.SHOW_PREDS:
                 cv2.imshow("YOLOv8 Tracking", annotated_frame)
         return {
-            "processed_frame": "",
+            "processed_frame": cv2.imencode('.jpg', annotated_frame)[1].tobytes(),
             "objects": [self.tracked_objects[track_id].json(send_frame=True) for track_id in track_ids],
         }
 

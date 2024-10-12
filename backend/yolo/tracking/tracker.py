@@ -1,9 +1,9 @@
 import numpy as np
-
 from ultralytics.trackers.basetrack import TrackState
 from ultralytics.trackers.bot_sort import BOTSORT
 from ultralytics.trackers.byte_tracker import STrack
 from ultralytics.trackers.utils import matching
+
 
 class BOTSORTArgs(object):
     track_high_thresh = 0.5  # threshold for the first association
