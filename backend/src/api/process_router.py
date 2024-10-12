@@ -1,20 +1,20 @@
+import base64
 import os
 import traceback
 from datetime import datetime
 from io import BytesIO
-import base64
 
 import numpy as np
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
-from fastapi.responses import StreamingResponse, Response, JSONResponse
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from PIL import Image
 from yolo.tracking.tracking import Tracker
 
 router = APIRouter(prefix='/api/v0', tags=['Video Processing'])
 
 print(os.path.dirname(__file__))
-tracker = Tracker(weights_path=os.path.join(
-    os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
+tracker = Tracker(weights_path=os.path.join(os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
+tracker.SHOW_PREDS = False
 
 
 def get_now_timestamp():
