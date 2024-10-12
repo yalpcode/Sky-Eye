@@ -7,7 +7,7 @@ from datetime import datetime
 from ultralytics import YOLO
 from ultralytics.engine.results import Boxes
 
-from tracker import BOTSORTArgs, BOTSORTv2
+from yolo.tracking.tracker import BOTSORTArgs, BOTSORTv2
 
 class TrackedObject:
     MAX_POINTS = 90

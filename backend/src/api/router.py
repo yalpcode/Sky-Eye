@@ -14,6 +14,7 @@ from fastapi import (
     UploadFile,
     status,
 )
+from fastapi.responses import StreamingResponse
 from src.utils.process_video import process_video
 from yolo.tracking.tracking import Tracker
 
@@ -27,7 +28,7 @@ def get_now_timestamp():
 
 
 @router.get(
-    "/processed/video/{video_id}",
+    "/video/processed/{video_id}",
     response_description="Upload new video",
     status_code=status.HTTP_201_CREATED,
 )
@@ -46,7 +47,7 @@ async def download_processed_video(
 
 
 @router.post(
-    "/raw/video/upload",
+    "/video/raw/upload",
     response_description="Upload new video",
     status_code=status.HTTP_201_CREATED,
 )
@@ -65,3 +66,22 @@ async def upload_new_video(
 
     background_tasks.add_task(process_video, process_video, video_path)
     return {'message': f"Successfuly uploaded {filename}"}
+
+
+@router.post(
+    "/video/frame/detect",
+    response_description="Detect objects per frame",
+    status_code=status.HTTP_201_CREATED,
+)
+async def detect_objects_per_frames(fragment: UploadFile) -> StreamingResponse:
+    from io import BytesIO
+    from PIL import Image
+    import numpy as np
+
+    fragment_bytes = await fragment.read()
+    fragment_numpy = np.array(Image.open(BytesIO(fragment_bytes)))
+    fragment_processed = tracker.track_next_frame(fragment_numpy)
+    print(fragment_processed)
+
+    image_stream = BytesIO(fragment_processed['processed_frame'])
+    return StreamingResponse(content=image_stream, media_type="image/png")
