@@ -8,6 +8,6 @@ services:
       - '8000:8000'
 
   drone-ai-frontend:
-    build: andrewlimit/ai-frontend:latest
+    image: andrewlimit/ai-frontend:latest
     ports:
       - '3000:3000'
