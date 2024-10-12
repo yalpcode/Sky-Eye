@@ -6,6 +6,10 @@ import droneImage from './drone.png'
 
 const fileTypes = ["MOV", "MP4"];
 
+function randint(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function DragDrop({ setVideoFile }) {
     const [dragActive, setDragActive] = React.useState(false);
     const inputRef = React.useRef(null);
@@ -64,25 +68,25 @@ function DragDrop({ setVideoFile }) {
     const [y1, setY1] = useState(0);
 
     useInterval(() => {
-        setX1(Math.max(0, Math.min(screenWidth - x1, Math.random() * 1000)));
-        setY1(Math.max(0, Math.min(screenHeight - y1 - 300, Math.random() * 1000)));
-    }, 1800);
+        setX1(randint(0, screenWidth - 400));
+        setY1(randint(0, screenHeight - 300));
+    }, randint(600, 1200));
 
     const [x2, setX2] = useState(0);
     const [y2, setY2] = useState(0);
 
     useInterval(() => {
-        setX2(Math.max(0, Math.min(screenWidth - x2, Math.random() * 1000)));
-        setY2(Math.max(0, Math.min(screenHeight - y2 - 300, Math.random() * 1000)));
-    }, 1800);
+        setX2(randint(0, screenWidth - 400));
+        setY2(randint(0, screenHeight - 300));
+    }, randint(600, 1200));
 
     const [x3, setX3] = useState(0);
     const [y3, setY3] = useState(0);
 
     useInterval(() => {
-        setX3(Math.max(0, Math.min(screenWidth - x3, Math.random() * 1000)));
-        setY3(Math.max(0, Math.min(screenHeight - y3 - 300, Math.random() * 1000)));
-    }, 1800);
+        setX3(randint(0, screenWidth - 400));
+        setY3(randint(0, screenHeight - 300));
+    }, randint(600, 1200));
 
     return (
         <div>
