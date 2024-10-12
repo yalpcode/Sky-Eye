@@ -11,3 +11,5 @@ services:
     image: andrewlimit/ai-frontend:latest
     ports:
       - '3000:3000'
+    stdin_open: true
+    command: 'yarn start'

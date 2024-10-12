@@ -5,17 +5,11 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libffi-dev \
     python3-dev \
+    libgl1-mesa-glx \
+    libglu1-mesa \
+    libglib2.0-0
     && apt-get clean
-
-RUN apt-get update && apt-get install -y libgl1-mesa-glx libglu1-mesa libglib2.0-0
-
-RUN pip install --no-cache-dir --upgrade pip
-
-# Устанавливаем PyTorch и torchvision для CPU
-# RUN pip install --no-cache-dir torch torchvision
-
-# Устанавливаем OpenCV (легковесная версия без GUI)
-# RUN pip install --no-cache-dir opencv-python-headless
+# RUN pip install --no-cache-dir --upgrade pip
 
 WORKDIR /drone-ai-backend
 
