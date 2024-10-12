@@ -1,7 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import "./index.scss";
+import axios from 'axios';
 
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+function convertBlobToBinaryString(blob) {
+    return '$binary' + btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
+}
 class VideoProcessor extends React.Component {
     constructor(props) {
         super(props);
@@ -27,6 +40,41 @@ class VideoProcessor extends React.Component {
         ];
     }
 
+    detect = (canvasElement, context) => {
+        canvasElement.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('frame', blob);
+
+            axios.post('https://7f91-89-113-157-82.ngrok-free.app/api/v0/video/frame/detect', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer *',
+                    'Access-Control-Allow-Origin': '*',
+                }
+            })
+                .then(response => {
+                    const imageData = new Uint8Array(response.data);
+                    const imageBase64 = `data:image/jpeg;base64,${response.data}`;
+                    console.log(imageData)
+                    const imageBlob = new Blob([response.data], { type: 'image/jpeg' });
+                    const imageURL = URL.createObjectURL(imageBlob);
+                    console.log(imageURL);
+
+                    const img = new Image();
+                    img.onload = () => {
+                        // context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+                        context.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+                        console.log("Good");
+                        URL.revokeObjectURL(imageURL);
+                    };
+                    img.src = imageURL;
+                })
+                .catch(error => {
+                    console.error('Ошибка отправки кадра:', error);
+                });
+        }, 'image/jpeg')
+    }
+
     componentDidMount = () => {
         if (this.props.videoFile) {
             const playerElement = this.playerRef.current;
@@ -48,6 +96,9 @@ class VideoProcessor extends React.Component {
                         context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
                         const frame = context.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+                        this.detect(canvasElement, context);
+                        this.pause();
 
                         context.putImageData(frame, 0, 0);
 
