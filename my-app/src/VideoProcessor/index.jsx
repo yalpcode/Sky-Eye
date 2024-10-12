@@ -22,6 +22,8 @@ class VideoProcessor extends React.Component {
         this.playerRef = React.createRef();
         this.videoRef = React.createRef();
         this.canvasRef = React.createRef();
+        this.newVideoRef = React.createRef();
+        this.pauseRef = React.createRef();
         this.isPlaying = false;
         this.videoUrl = URL.createObjectURL(props.videoFile);
         this.state = {
@@ -40,12 +42,12 @@ class VideoProcessor extends React.Component {
         ];
     }
 
-    detect = (canvasElement, context) => {
+    detect = (canvasElement, context_video) => {
         canvasElement.toBlob(async (blob) => {
             const formData = new FormData();
             formData.append('frame', blob);
 
-            axios.post('https://7f91-89-113-157-82.ngrok-free.app/api/v0/video/frame/detect', formData, {
+            axios.post('http://127.0.0.1:8000/api/v0/video/frame/detect', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer *',
@@ -53,18 +55,13 @@ class VideoProcessor extends React.Component {
                 }
             })
                 .then(response => {
-                    const imageData = new Uint8Array(response.data);
-                    const imageBase64 = `data:image/jpeg;base64,${response.data}`;
-                    console.log(imageData)
-                    const imageBlob = new Blob([response.data], { type: 'image/jpeg' });
-                    const imageURL = URL.createObjectURL(imageBlob);
-                    console.log(imageURL);
+                    const imageURL = `data:image/jpeg;base64,${response.data['image']}`;
 
                     const img = new Image();
                     img.onload = () => {
-                        // context.clearRect(0, 0, canvasElement.width, canvasElement.height);
-                        context.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
-                        console.log("Good");
+                        if (this.isPlaying) {
+                            context_video.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+                        }
                         URL.revokeObjectURL(imageURL);
                     };
                     img.src = imageURL;
@@ -80,9 +77,17 @@ class VideoProcessor extends React.Component {
             const playerElement = this.playerRef.current;
             const videoElement = this.videoRef.current;
             const canvasElement = this.canvasRef.current;
+            const newVideoElement = this.newVideoRef.current;
+            const pauseElement = this.pauseRef.current;
             const context = canvasElement.getContext('2d');
+            const context_video = newVideoElement.getContext('2d');
             canvasElement.width = playerElement.offsetWidth * 0.8;
             canvasElement.height = canvasElement.width * videoElement.offsetHeight / videoElement.offsetWidth;
+            newVideoElement.width = canvasElement.width;
+            newVideoElement.height = canvasElement.height;
+
+            pauseElement.style.left = `${-newVideoElement.width / 2 + 50}px`;
+            pauseElement.style.top = `${newVideoElement.height - 80}px`;
 
             context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
@@ -97,8 +102,7 @@ class VideoProcessor extends React.Component {
 
                         const frame = context.getImageData(0, 0, canvasElement.width, canvasElement.height);
 
-                        this.detect(canvasElement, context);
-                        this.pause();
+                        this.detect(canvasElement, context_video);
 
                         context.putImageData(frame, 0, 0);
 
@@ -138,10 +142,11 @@ class VideoProcessor extends React.Component {
                     Your browser does not support the video tag.
                 </video>
                 <div className='player'>
-                    <button className="bth-pause" onClick={this.handleClick}>
+                    <button className="bth-pause" ref={this.pauseRef} onClick={this.handleClick}>
                         {this.svgs[this.state.currentSvgIndex]} {/* Отображаем текущий SVG */}
                     </button>
-                    <canvas className="new-video" ref={this.canvasRef} width="50%" height="50%" />
+                    <canvas className="get-frame" ref={this.canvasRef} width="50%" height="50%" />
+                    <canvas className="new-video" ref={this.newVideoRef} width="50%" height="50%" />
                 </div>
             </div>
         );

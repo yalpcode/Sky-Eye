@@ -2,17 +2,19 @@ import os
 import traceback
 from datetime import datetime
 from io import BytesIO
+import base64
 
 import numpy as np
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
-from fastapi.responses import StreamingResponse, Response
+from fastapi.responses import StreamingResponse, Response, JSONResponse
 from PIL import Image
 from yolo.tracking.tracking import Tracker
 
 router = APIRouter(prefix='/api/v0', tags=['Video Processing'])
 
 print(os.path.dirname(__file__))
-tracker = Tracker(weights_path=os.path.join(os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
+tracker = Tracker(weights_path=os.path.join(
+    os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
 
 
 def get_now_timestamp():
@@ -83,15 +85,18 @@ async def detect_objects_per_frames(frame: UploadFile = File(...)) -> Response:
             detail='Invalid document type. Reading error',
         )
     # try:
-    print('frame_numpy', frame_numpy)
-    print('frame_numpy shape', frame_numpy.shape)
+    # print('frame_numpy', frame_numpy)
+    # print('frame_numpy shape', frame_numpy.shape)
     fragment_processed = tracker.track_next_frame(frame_numpy)
-    print('fragment_processed', fragment_processed)
+    # print('fragment_processed', fragment_processed)
 
-    image_bytes: bytes = fragment_processed['processed_frame']  #BytesIO(fragment_processed['processed_frame'])
+    # BytesIO(fragment_processed['processed_frame'])
+    image_bytes: bytes = fragment_processed['processed_frame']
     # except Exception:
     #     raise HTTPException(
     #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
     #         detail='Processing error',
     #     )
-    return Response(content=image_bytes, media_type='image/jpg')
+    base64_image = base64.b64encode(image_bytes).decode('utf-8')
+
+    return JSONResponse({"image": base64_image})

@@ -14,24 +14,33 @@
 }
 
 .player {
+    position: inherit;
     width: 100%;
     height: 100%;
     display: flex;
-    // align-items: center;
     justify-content: center;
 }
 
-.new-video {
+.get-frame {
     z-index: 2;
+    position: absolute;
+    border-radius: 20px;
+}
+
+.new-video {
+    z-index: 3;
     position: absolute;
     border-radius: 20px;
     box-shadow: 7px 8px 20px #5e5e5e,
         -7px 8px 20px #5e5e5e;
+    background-color: #5e5e5e;
 }
 
 .bth-pause {
+    position: inherit;
     background: transparent;
     border-width: 0;
-    z-index: 3;
+    z-index: 4;
     margin-left: 0;
+    cursor: pointer;
 }
