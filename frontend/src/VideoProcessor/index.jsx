@@ -1,23 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import "./index.scss";
 import axios from 'axios';
+import Queue from "../queue"
 
-function blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-}
-
-function convertBlobToBinaryString(blob) {
-    return '$binary' + btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
-}
 class VideoProcessor extends React.Component {
     constructor(props) {
         super(props);
+
+        if (process.env.HOST != undefined && process.env.PORT) {
+            this.host = process.env.HOST;
+            this.port = process.env.PORT;
+        } else {
+            this.host = "127.0.0.1";
+            this.port = "8000"
+        }
 
         this.playerRef = React.createRef();
         this.videoRef = React.createRef();
@@ -25,6 +21,7 @@ class VideoProcessor extends React.Component {
         this.newVideoRef = React.createRef();
         this.pauseRef = React.createRef();
         this.isPlaying = false;
+        this.queue = Queue();
         this.videoUrl = URL.createObjectURL(props.videoFile);
         this.state = {
             currentSvgIndex: 0,
@@ -47,7 +44,7 @@ class VideoProcessor extends React.Component {
             const formData = new FormData();
             formData.append('frame', blob);
 
-            axios.post('http://127.0.0.1:8000/api/v0/video/frame/detect', formData, {
+            axios.post(`http://${this.host}:${this.port}/api/v0/video/frame/detect`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer *',
@@ -59,9 +56,7 @@ class VideoProcessor extends React.Component {
 
                     const img = new Image();
                     img.onload = () => {
-                        if (this.isPlaying) {
-                            context_video.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
-                        }
+                        this.queue.emplace(img);
                         URL.revokeObjectURL(imageURL);
                     };
                     img.src = imageURL;
@@ -95,8 +90,16 @@ class VideoProcessor extends React.Component {
 
             context.putImageData(frame, 0, 0);
 
+
             videoElement.onplay = () => {
                 const drawFrame = () => {
+                    if (this.isPlaying && this.queue.size() >= 5) {
+                        let img = this.queue.top();
+                        if (img !== -1) {
+                            context_video.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+                        }
+                    }
+
                     if (!videoElement.paused && !videoElement.ended) {
                         context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
@@ -154,4 +157,3 @@ class VideoProcessor extends React.Component {
 }
 
 export default VideoProcessor;
-
