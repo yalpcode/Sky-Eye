@@ -54,9 +54,12 @@ body {
 
     border-width: 3px;
     border-radius: 8rem;
-    border-style: solid;
-    border-color: #cbd5e1;
     background-color: #ffffff;
+
+    box-shadow: 13px 8px 20px #627955,
+        /* Тень справа */
+        -13px 8px 20px #627955;
+    /* Тень слева */
 }
 
 .upload-file-text {
