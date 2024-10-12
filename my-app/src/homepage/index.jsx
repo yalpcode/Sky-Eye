@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
+import { useNavigate } from 'react-router-dom';
 import "./index.scss";
 
 const fileTypes = ["MOV", "MP4"];
-
-async function handleFile(file) {
-    const url = "/video-proccesor"; // URL страницы для перенаправления
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = file.name; // (необязательно)
-    link.href += "?file=" + encodeURIComponent(file.name); // Добавление файла в URL
-    link.click();
-}
 
 function DragDrop() {
     // drag state
     const [dragActive, setDragActive] = React.useState(false);
     // ref
     const inputRef = React.useRef(null);
+
+    const to = useNavigate();
+
+    async function handleFile(file) {
+        to('/video-processor', {
+            state: { file: file },
+        });
+    }
 
     // handle drag events
     const handleDrag = function (e) {
