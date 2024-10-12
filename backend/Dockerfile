@@ -1,4 +1,21 @@
-FROM python:3.12-alpine
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-dev \
+    && apt-get clean
+
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libglu1-mesa libglib2.0-0
+
+RUN pip install --no-cache-dir --upgrade pip
+
+# Устанавливаем PyTorch и torchvision для CPU
+# RUN pip install --no-cache-dir torch torchvision
+
+# Устанавливаем OpenCV (легковесная версия без GUI)
+# RUN pip install --no-cache-dir opencv-python-headless
 
 WORKDIR /drone-ai-backend
 
