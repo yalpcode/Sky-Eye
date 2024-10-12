@@ -49,7 +49,7 @@ function DragDrop({ setVideoFile }) {
     return (
         <div>
             <div className="name">
-                <h1 className="name__text">DroneAI</h1>
+                <h1 className="name__text">DRONE <b>AI</b></h1>
             </div>
             <div className="form">
                 <div className="input-form">
@@ -57,14 +57,14 @@ function DragDrop({ setVideoFile }) {
                     <form id="form-file-upload" onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
                         <input ref={inputRef} type="file" id="input-file-upload" multiple={true} onChange={handleChange} accept="video/*" />
                         <label id="label-file-upload" htmlFor="input-file-upload" className={dragActive ? "drag-active" : ""}>
-                            <svg className="upload-image" width="227" height="269" viewBox="0 0 227 269" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M81.25 204H145.75C154.619 204 161.875 196.744 161.875 187.875V107.25H187.514C201.865 107.25 209.121 89.835 198.962 79.6762L124.949 5.6625C123.457 4.16765 121.685 2.9817 119.734 2.17252C117.784 1.36335 115.692 0.946838 113.581 0.946838C111.469 0.946838 109.378 1.36335 107.427 2.17252C105.476 2.9817 103.704 4.16765 102.213 5.6625L28.1988 79.6762C18.04 89.835 25.135 107.25 39.4862 107.25H65.125V187.875C65.125 196.744 72.3812 204 81.25 204ZM16.75 236.25H210.25C219.119 236.25 226.375 243.506 226.375 252.375C226.375 261.244 219.119 268.5 210.25 268.5H16.75C7.88125 268.5 0.625 261.244 0.625 252.375C0.625 243.506 7.88125 236.25 16.75 236.25Z" fill="#8CB676" />
+                            <svg width="83" height="98" viewBox="0 0 83 98" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M29.6429 74.3748H53.3571C56.6179 74.3748 59.2857 71.7169 59.2857 68.4685V38.937H68.7121C73.9886 38.937 76.6564 32.5582 72.9214 28.8372L45.7093 1.72726C45.1608 1.17973 44.5093 0.745333 43.7921 0.448946C43.0749 0.15256 42.3061 0 41.5296 0C40.7532 0 39.9844 0.15256 39.2672 0.448946C38.55 0.745333 37.8985 1.17973 37.35 1.72726L10.1379 28.8372C6.40286 32.5582 9.01143 38.937 14.2879 38.937H23.7143V68.4685C23.7143 71.7169 26.3821 74.3748 29.6429 74.3748ZM5.92857 86.1874H77.0714C80.3321 86.1874 83 88.8452 83 92.0937C83 95.3422 80.3321 98 77.0714 98H5.92857C2.66786 98 0 95.3422 0 92.0937C0 88.8452 2.66786 86.1874 5.92857 86.1874Z" fill="#ECECEC" />
                             </svg>
-                            <div>
+                        </label>
+                        <div>
                                 <p className="input-text">Drag and drop your file here or </p>
                                 <button className="upload-button" onClick={onButtonClick}>browse</button>
                             </div>
-                        </label>
                         {dragActive && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
                     </form>
                 </div>
