@@ -40,20 +40,30 @@ body {
     padding-top: 10%;
     font-family: 'HSESans-Bold';
     font-size: 26px;
-    color: #ffffff;
+    color: #8cb676;
 }
 
 .input-form {
     height: 90%;
-    width: 60%;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-content: center;
     align-items: center;
+    flex-direction: column;
+
     border-width: 3px;
     border-radius: 8rem;
     border-style: solid;
     border-color: #cbd5e1;
+    background-color: #ffffff;
+}
+
+.upload-file-text {
+    font-family: 'HSESans-Bold';
+    font-size: 27px;
+    color: #8cb676;
+    margin-bottom: 0;
 }
 
 #input-file-upload {
@@ -71,7 +81,7 @@ body {
     border-radius: 8rem;
     border-style: dashed;
     border-color: #cbd5e1;
-    background-color: #6e8f5c;
+    background-color: #e9f3e5;
 }
 
 #label-file-upload.drag-active {
@@ -85,7 +95,7 @@ body {
     font-family: 'HSESans-Bold';
     font-size: 30px;
     background-color: transparent;
-    color: #ffffff;
+    color: #759862;
 }
 
 .upload-button:hover {
