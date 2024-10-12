@@ -1,0 +1,129 @@
+.form {
+    padding: 1%;
+    max-width: 1920px;
+    max-height: 2000px;
+    display: flex;
+    justify-content: center;
+}
+
+.name {
+    font-family: 'HSESans-Bold';
+    color: #ffffff;
+    padding-top: 1.5%;
+    padding-left: 3%;
+    font-size: 30px;
+}
+
+.name__text {
+    margin: 0;
+    text-shadow: 7px 8px 20px #5e5e5e,
+        -7px 8px 20px #5e5e5e;
+    ;
+}
+
+#form-file-upload {
+    flex-direction: column;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.input-text {
+    padding-top: 8%;
+    font-family: 'HSESans-Bold';
+    font-size: 23px;
+    color: #636363;
+}
+
+.input-form {
+    margin-top: 2%;
+    height: 100%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    border-width: 3px;
+    border-radius: 8rem;
+    padding: 4% 50px;
+}
+
+.upload-file-text {
+    font-family: 'HSESans-Bold';
+    font-size: 28px;
+    color: #636363;
+    margin-top: 0px;
+    margin: 0;
+    margin-bottom: 3%;
+}
+
+#input-file-upload {
+    display: none;
+}
+
+#label-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-radius: 6rem;
+    border-style: dashed;
+    border-color: #cbd5e1;
+    // background-color: #f3f3f3;
+    padding: 20% 35%;
+    box-shadow: 7px 8px 20px #5e5e5e,
+        /* Тень справа */
+        // 777777
+        -7px 8px 20px #5e5e5e;
+}
+
+#label-file-upload:hover {
+    cursor: pointer;
+    background-color: #232323;
+}
+
+#label-file-upload.drag-active {
+    background-color: #ffffff;
+}
+
+.upload-button {
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+    font-family: 'HSESans-Bold';
+    font-size: 28px;
+    background-color: transparent;
+    color: #8f8f8f;
+    margin-bottom: 2%;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.upload-image {
+    height: 100px;
+    margin-top: 2%;
+}
+
+.upload-button:hover {
+    text-decoration-line: underline;
+}
+
+#drag-file-element {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
