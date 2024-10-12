@@ -1,0 +1,25 @@
+.video-player-zone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    max-height: 800px;
+}
+
+.video {
+    position: absolute;
+    max-width: 80%;
+    max-height: 70%;
+}
+
+.new-video {
+    position: absolute;
+    border-radius: 20px;
+    box-shadow: 13px 8px 20px #627955,
+        -13px 8px 20px #627955;
+}
+
+.bth-pause {
+    z-index: 2;
+}
