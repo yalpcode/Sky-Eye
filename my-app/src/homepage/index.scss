@@ -85,6 +85,11 @@
     padding: 2% 10px;
 }
 
+#label-file-upload:hover {
+    cursor: pointer;
+    background-color: #f0f7ed;
+}
+
 #label-file-upload.drag-active {
     background-color: #ffffff;
 }
