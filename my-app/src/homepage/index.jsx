@@ -69,7 +69,7 @@ function DragDrop() {
     return (
         <body>
             <div className="name">
-                <h1>DroneAi</h1>
+                <h1>DroneAI</h1>
             </div>
             <div className="input-form">
                 <form id="form-file-upload" onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>

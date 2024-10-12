@@ -1,9 +1,15 @@
+@font-face {
+    font-family: HSESans-Bold;
+    src: url("../fonts/HSESans-Bold.woff2");
+}
+
 body {
     background-color: #779B64;
     vertical-align: middle;
 }
 
 .name {
+    font-family: 'HSESans-Bold';
     color: #ffffff;
     margin-top: 1.5%;
     margin-left: 3%;
@@ -23,6 +29,9 @@ body {
 }
 
 .input-text {
+    padding-top: 10%;
+    font-family: 'HSESans-Bold';
+    font-size: 26px;
     color: #ffffff;
 }
 
@@ -58,10 +67,10 @@ body {
 
 .upload-button {
     cursor: pointer;
-    padding: 0.25rem;
     font-size: 1rem;
     border: none;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'HSESans-Bold';
+    font-size: 30px;
     background-color: transparent;
     color: #ffffff;
 }
