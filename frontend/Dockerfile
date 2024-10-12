@@ -4,7 +4,8 @@ ADD .  /drone-ai-frontend
 WORKDIR /drone-ai-frontend
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
-ENV HOST=drone-ai-backend
+ENV HOST_BACKEND=drone-ai-backend
+ENV PORT_BACKEND=8000
 
 RUN yarn install
 
