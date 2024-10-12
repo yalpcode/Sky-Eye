@@ -3,12 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import "./index.scss";
 import { useInterval } from 'react-use'
 import droneImage from './drone.png'
+import Drone from "./Drone";
 
-const fileTypes = ["MOV", "MP4"];
-
-function randint(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 function DragDrop({ setVideoFile }) {
     const [dragActive, setDragActive] = React.useState(false);
@@ -64,75 +60,20 @@ function DragDrop({ setVideoFile }) {
 
     console.log(screenHeight, screenWidth)
 
-    const [x1, setX1] = useState(0);
-    const [y1, setY1] = useState(0);
-
-    useInterval(() => {
-        setX1(randint(0, screenWidth - 400));
-        setY1(randint(0, screenHeight - 300));
-    }, randint(600, 1200));
-
-    const [x2, setX2] = useState(0);
-    const [y2, setY2] = useState(0);
-
-    useInterval(() => {
-        setX2(randint(0, screenWidth - 400));
-        setY2(randint(0, screenHeight - 300));
-    }, randint(600, 1200));
-
-    const [x3, setX3] = useState(0);
-    const [y3, setY3] = useState(0);
-
-    useInterval(() => {
-        setX3(randint(0, screenWidth - 400));
-        setY3(randint(0, screenHeight - 300));
-    }, randint(600, 1200));
-
     return (
         <div>
             <div className="name">
                 <span className="drone">SKY </span>
                 <span className="ai">EYE</span>
             </div>
-            <div className="drone1" style={{
-                position: 'absolute'
-            }}>
-                <img
-                    className="flying1"
-                    src={droneImage}
-                    style={{
-                        position: 'absolute',
-                        transition: 'transform 2s ease',
-                        transform: `translate(${x1}px, ${y1}px)`
-                    }}
-                />
-            </div>
-            <div className="drone2" style={{
-                position: 'absolute'
-            }}>
-                <img
-                    className="flying1"
-                    src={droneImage}
-                    style={{
-                        position: 'absolute',
-                        transition: 'transform 2s ease',
-                        transform: `translate(${x2}px, ${y2}px)`
-                    }}
-                />
-            </div>
-            <div className="drone3" style={{
-                position: 'absolute'
-            }}>
-                <img
-                    className="flying1"
-                    src={droneImage}
-                    style={{
-                        position: 'absolute',
-                        transition: 'transform 2s ease',
-                        transform: `translate(${x3}px, ${y3}px)`
-                    }}
-                />
-            </div>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
+            <Drone screenHeight = {screenHeight} screenWidth = {screenWidth} ></Drone>
             <div className="form">
                 <div className="input-form">
                     <p className="upload-file-text">Upload file</p>
