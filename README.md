@@ -29,7 +29,7 @@ git clone https://github.com/yalpcode/Sky-Eye
 ```
 Go to it: 
 ```
-cd droneAI
+cd Sky-Eye
 ```
 Run:
 ```
