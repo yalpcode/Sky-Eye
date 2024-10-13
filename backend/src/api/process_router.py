@@ -13,8 +13,6 @@ from yolo.tracking.tracking import Tracker
 router = APIRouter(prefix='/api/v0', tags=['Video Processing'])
 
 print(os.path.dirname(__file__))
-tracker = Tracker(weights_path=os.path.join(os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
-tracker.SHOW_PREDS = False
 
 
 def get_now_timestamp():
@@ -68,6 +66,8 @@ def get_now_timestamp():
     status_code=status.HTTP_201_CREATED,
 )
 async def detect_objects_per_frames(frame: UploadFile = File(...)) -> Response:
+    tracker = Tracker(weights_path=os.path.join(os.path.dirname(__file__), '../../yolo/inputs/latest_yolo.pt'))
+    tracker.SHOW_PREDS = False
     print(frame.content_type)
     if frame.content_type not in ('image/jpeg', 'image/jpg', 'image/png'):
         raise HTTPException(
