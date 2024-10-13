@@ -25,7 +25,7 @@ The uniqueness of our solution lies in the fact that we not only select objects 
 ## Installation
 Clone this repository:
 ```
-git clone https://github.com/yalpcode/droneAI
+git clone https://github.com/yalpcode/Sky-Eye
 ```
 Go to it: 
 ```
