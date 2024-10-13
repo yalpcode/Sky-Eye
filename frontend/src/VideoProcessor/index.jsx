@@ -11,7 +11,7 @@ class VideoProcessor extends React.Component {
             this.host_backend = process.env.HOST_BACKEND;
             this.port_backend = process.env.PORT_BACKEND;
         } else {
-            this.host_backend = "127.0.0.1" + process.env.PORT_BACKEND;
+            this.host_backend = "drone-ai-backend";
             this.port_backend = "8000"
         }
 
